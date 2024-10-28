@@ -12,29 +12,32 @@ import java.util.Properties;
 
 public class Util {
     public static Connection getJdbcConnection() {
-        Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/jdbc.properties")) {
-            properties.load(fileInputStream);
+        Properties properties = getProperties();
+        try {
             return DriverManager.getConnection(properties.getProperty("DB_URL"),
                     properties.getProperty("USERNAME"),
                     properties.getProperty("PASSWORD"));
         }
-        catch (IOException | SQLException e) {
+        catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static SessionFactory getHibernateSessionFactory() {
-        Properties configuration = new Properties();
+        return new Configuration()
+                .addProperties(getProperties())
+                .addAnnotatedClass(User.class)
+                .buildSessionFactory();
+    }
+
+    private static Properties getProperties() {
+        Properties properties = new Properties();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try {
-            configuration.load(classLoader.getResourceAsStream("hibernate.properties"));
+            properties.load(classLoader.getResourceAsStream("hibernate.properties"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new Configuration()
-                .addProperties(configuration)
-                .addAnnotatedClass(User.class)
-                .buildSessionFactory();
+        return properties;
     }
 }
