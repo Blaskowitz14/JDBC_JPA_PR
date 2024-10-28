@@ -1,3 +1,5 @@
+import vladdossik.jdbc.jpa.dao.UserDaoHibernateImpl;
+import vladdossik.jdbc.jpa.dao.UserDaoJDBCImpl;
 import vladdossik.jdbc.jpa.model.User;
 import vladdossik.jdbc.jpa.service.UserService;
 import vladdossik.jdbc.jpa.service.UserServiceImpl;
@@ -7,7 +9,8 @@ import org.junit.Test;
 import java.util.List;
 
 public class UserServiceTest {
-    private final UserService userService = new UserServiceImpl();
+
+    private final UserService userService = new UserServiceImpl(new UserDaoJDBCImpl());
 
     private final String testName = "Ivan";
     private final String testLastName = "Ivanov";
