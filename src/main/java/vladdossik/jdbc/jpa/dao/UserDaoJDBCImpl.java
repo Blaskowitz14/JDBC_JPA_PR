@@ -13,6 +13,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     private final Connection connection = Util.getJdbcConnection();
+    
     public void createUsersTable() {
         String sqlQuery = "CREATE TABLE IF NOT EXISTS Users " +
                 "(id BIGSERIAL not NULL, " +
